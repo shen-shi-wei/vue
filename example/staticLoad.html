@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+<div v-cloak class="aui-wrapper">
+	<h2 align="center">欢迎来到桩基静载的"三图五表"示例页面</h2>
+	<ul>
+	   <li>1、根据工程流水号关联到该工程下的桩信息，本系统以工程流水号为<span style="color:red">"190001"</span>为例，点击  <button style="color:red" @click="getStakeMsg">工程桩信息</button>  获取</li>
+	          <br>
+	        <div class="customtable">
+			   <table>
+			     <thead>
+			       <tr>
+					   <th>序号</th>
+					   <th>工程流水号</th>
+					   <th>桩Id</th>
+					   <th>桩号</th>
+					   <th>设备编号</th>
+					   <th>检测方法</th>
+					   <th>最大加载值(KN)</th>
+					   <th>检测日期</th>
+				   </tr>
+			     </thead>
+			     <tbody>
+			        <tr v-for="(item,idx) in stakeMsg" :class="{'customtableBg': idx%2 }">
+			          <td width="50">{{idx+1}}</td>
+			          <td>{{item.serialNo}}</td>
+			          <td :class="{'customtablefont': idx==0 }">{{item.id}}</td>
+			          <td>{{item.pileNo}}</td>
+			          <td>{{item.machineId}}</td>
+			          <td>
+			               <span v-if="item.testType == 1">单桩竖向抗压</span>
+			               <span v-if="item.testType == 2">单桩竖向抗拔</span>
+			               <span v-if="item.testType == 3">岩石锚杆抗拔</span>
+			               <span v-if="item.testType == 4">自平衡</span>
+			               <span v-if="item.testType == 5">复合地基</span>
+			               <span v-if="item.testType == 6">浅层平板</span>
+			               <span v-if="item.testType == 7">深层平板</span>
+			               <span v-if="item.testType == 8">原位试验_土层</span>
+			               <span v-if="item.testType == 9">原位试验_岩基</span>
+			               <span v-if="item.testType == 10">岩基荷载</span>
+			               <span v-if="item.testType == 11">水平静载循环法</span>
+			               <span v-if="item.testType == 12">水平静载维持荷载法</span>
+			          </td>
+			          <td>{{item.maxLoad}}</td>
+			          <td>{{item.startTime}}</td>
+			        </tr>
+			     </tbody>
+			   </table>
+          </div><br>
+          <li>2、根据桩信息，任取一根桩ID查询，取得基本信息，本系统以桩id为<span style="color:red">"102184390397788160"</span>为例，点击  <button style="color:red" @click="getBasicInfo">桩基本信息</button>  获取</li>
+	          <br>
+	          <div class="detailsMsg">
+				<table>
+					<tr>
+						<td>检测流水号:{{stakeInfo.serialNo}}</td>
+						<td>桩号:{{stakeInfo.pileNo}}</td>
+						<td>仪器编号:{{stakeInfo.machineId}}</td>
+						<td>上岗证号:{{stakeInfo.workNo}}</td>
+						<td>千斤顶回归方程:a={{stakeInfo.jackRatioa}},b={{stakeInfo.jackRatiob}}</td>
+					</tr>
+					<tr>
+						<td>测试方法：
+							<span v-if="stakeInfo.testType == 1">单桩竖向抗压</span>
+							<span v-if="stakeInfo.testType == 2">单桩竖向抗拔</span>
+							<span v-if="stakeInfo.testType == 3">岩石锚杆抗拔</span>
+							<span v-if="stakeInfo.testType == 4">自平衡</span>
+							<span v-if="stakeInfo.testType == 5">复合地基</span>
+							<span v-if="stakeInfo.testType == 6">浅层平板</span>
+							<span v-if="stakeInfo.testType == 7">深层平板</span>
+							<span v-if="stakeInfo.testType == 8">原位试验_土层</span>
+							<span v-if="stakeInfo.testType == 9">原位试验_岩基</span>
+							<span v-if="stakeInfo.testType == 10">岩基荷载</span>
+							<span v-if="stakeInfo.testType == 11">水平静载循环法</span>
+							<span v-if="stakeInfo.testType == 12">水平静载维持荷载法</span>
+						</td>
+						<td>预估荷载:{{stakeInfo.maxLoad}} KN</td>
+						<td>开始时间:{{stakeInfo.startTime}}</td>
+						<td>GPS定位:{{stakeInfo.maxLoad==0?'无效定位':'有效定位'}}</td>
+						<td>力传感器校正系数:{{stakeInfo.sensorAdjust}}</td>
+					</tr>
+					<tr>
+						<td>最大位移:{{stakeInfo.maxValue}} mm</td>
+						<td>记录数:{{stakeInfo.recordTimes}}</td>
+						<td>上传时间:{{stakeInfo.createTime}}</td>
+						<td>设备厂家:{{stakeInfo.vendorId}}</td>
+						<td>千斤顶额定出力(kN):{{stakeInfo.jackFixedOutput}}</td>
+					</tr>
+				</table>
+			</div><br>
+          <li>3、根据桩信息，任取一根桩ID查询，取得详表信息，本系统以桩id为<span style="color:red">"102184390397788160"</span>为例，点击  <button style="color:red" @click="getDetailsMsg">桩详表信息</button>  获取</li>
+	          <br>
+	          <div class="customtable">
+				   <table>
+				     <thead>
+					       <tr v-for="(m,i) in detailData.header">
+							   <th v-for="(m2,i2) in m" :rowspan="m2.rowspan ? m2.rowspan:1" :colspan="m2.colspan?m2.colspan:1">{{m2.lable}}</th>
+						   </tr>
+				     </thead>
+				     <tbody>
+				          <tr v-for="(m,i) in detailData.data">
+							   <td v-for="(m2,i2) in m" :rowspan="m2.rowspan ? m2.rowspan:1" :class="{'customtablefont': m2.loadDirect==0}">{{m2.v}}</td>
+						   </tr>
+				     </tbody>
+				   </table>
+			 </div><br>
+			 <li>4、根据桩信息，任取一根桩ID查询，取得详表信息，本系统以桩id为<span style="color:red">"102184390397788160"</span>为例，点击  <button style="color:red" @click="getTotalData">桩总表信息</button>  获取</li>
+	          <br>
+	          <div class="customtable">
+				   <table>
+				     <thead>
+					       <tr v-for="(m,i) in totalData.header">
+							   <th v-for="(m2,i2) in m" :rowspan="m2.rowspan ? m2.rowspan:1" :colspan="m2.colspan?m2.colspan:1">{{m2.lable}}</th>
+						   </tr>
+				     </thead>
+				     <tbody>
+				          <tr v-for="(m,i) in totalData.data" :class="{'customtableBg': i%2 }">
+							   <td width="50" :class="{'customtablefont': m[0].loadDirect==0}">{{i+1}}</td>
+							   <td v-for="(m2,i2) in m" :class="{'customtablefont': m2.loadDirect==0}">{{m2.v}}</td>
+						   </tr>
+				     </tbody>
+				   </table>
+			 </div><br>
+			  <li>5、根据桩信息，任取一根桩ID查询，取得详表信息，本系统以桩id为<span style="color:red">"102184390397788160"</span>为例，点击  <button style="color:red" @click="getLoadData">桩加载表信息</button>  获取</li>
+	          <br>
+	          <div class="customtable">
+				   <table>
+				     <thead>
+					       <tr>
+							   <th v-for="(m,i) in loadData.header">{{m.lable}}</th>
+						   </tr>
+				     </thead>
+				     <tbody>
+				          <tr v-for="(m,i) in loadData.data" :class="{'customtableBg': i%2 }">
+							   <td v-for="(m2,k2,i2) in m">{{m2}}</td>
+						   </tr>
+				     </tbody>
+				   </table>
+			 </div><br>
+			 <li>6、根据桩信息，任取一根桩ID查询，取得详表信息，本系统以桩id为<span style="color:red">"102184390397788160"</span>为例，点击  <button style="color:red" @click="getUnLoadData">桩卸载表信息</button>  获取</li>
+	          <br>
+	          <div class="customtable">
+				   <table>
+				     <thead>
+					       <tr>
+							   <th v-for="(m,i) in unLoadData.header">{{m.lable}}</th>
+						   </tr>
+				     </thead>
+				     <tbody>
+				          <tr v-for="(m,i) in unLoadData.data" :class="{'customtableBg': i%2 }">
+							   <td v-for="(m2,k2,i2) in m">{{m2}}</td>
+						   </tr>
+				     </tbody>
+				   </table>
+			 </div><br>
+			 <li>7、根据桩信息，任取一根桩ID查询，取得详表信息，本系统以桩id为<span style="color:red">"102184390397788160"</span>为例，点击  <button style="color:red" @click="getLogData">桩日志表信息</button>  获取</li>
+	          <br>
+	          <div class="customtable">
+				   <table>
+				     <thead>
+				       <tr>
+						   <th>序号</th>
+						   <th>事件类型</th>
+						   <th>发生时间</th>
+						   <th>事件内容</th>
+						   <th>详细</th>
+					   </tr>
+				     </thead>
+				     <tbody>
+				        <tr v-for="(item,idx) in logData" :class="{'customtableBg': idx%2 }">
+				          <td width="50">{{idx+1}}</td>
+				          <td>
+				               <span v-if="item.logType == 0">控制</span>
+				               <span v-if="item.logType == 1">参数</span>
+				               <span v-if="item.logType == 2">数据</span>
+				               <span v-if="item.logType == 3">状态</span>
+				          </td>
+				          <td>{{item.eventTime}}</td>
+				          <td>{{item.eventInfo}}</td>
+				          <td>{{item.remarks}}</td>
+				        </tr>
+				     </tbody>
+			   </table>
+			 </div><br>
+			  <li>8、根据桩信息，任取一根桩ID查询，取得详表信息，本系统以桩id为<span style="color:red">"102184390397788160"</span>为例，点击  <button style="color:red" @click="getCurveData">桩曲线图</button>  获取</li>
+	          <br>
+	              <div id="static_qs" style="width: 650px;height:500px;float:left"></div>
+				  <div id="static_slgq" style="width: 650px;height:500px;float:left"></div>
+				  <div id="static_slgt"  v-if="stakeInfo.testType != 11" style="width: 650px;height:500px;float:left"></div><br>
+	</ul>
+</div>
+<!-- 插件 -->
+<script src="plugins/vue-2.5.17/vue.min.js"></script>
+<script src="plugins/axios-0.18.0/axios.min.js"></script>
+<script src="plugins/es6-promise-4.2.4/es6-promise.auto.min.js"></script>
+<script src="plugins/echart-4.2.1/echarts.common.min.js"></script>
+<!-- 业务 -->
+<script src="js/common.js"></script>
+<script src="js/staticCal-min.js"></script>
+<script src="js/staticLoad.js"></script>
+</body>
+</html>

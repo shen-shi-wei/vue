@@ -1,0 +1,32 @@
+.detailsMsg table {
+	width: 100%;
+	border: 1px solid #ebeef5;
+	border-collapse: collapse
+}
+.detailsMsg table td, .detailsMsg table th {
+	padding: 12px 10px;
+	border: 1px solid #ebeef5;
+	font-size: 12px
+}
+.detailsMsg table th {
+	width: 15%
+}
+.customtable table{
+	width:100%;
+	border-collapse: collapse;
+}
+.customtable table td, .ietable table th {
+	padding: 12px 10px;
+	border:1px solid #EBEEF5;
+	text-align:center;
+	font-size: 12px;
+}
+.customtable table thead th {
+	background-color:#F5F7FA
+}
+.customtableBg {
+	background-color:#FAFAFA
+}
+.customtablefont {
+	color:red
+}
