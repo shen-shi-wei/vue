@@ -52,7 +52,7 @@
 			     </tbody>
 			   </table>
           </div><br>
-          <li>2、根据桩信息，任取一根桩ID查询，取得基本信息，本系统以桩id为<span style="color:red">"102184390397788160"</span>为例，点击  <button style="color:red" @click="getBasicInfo">桩基本信息</button>  获取</li>
+          <li>2、根据桩信息，任取一根桩ID查询，取得基本信息，本系统以桩id为<span style="color:red">"102184390397788160"</span>为例，点击  <button style="color:red" @click="getDetailsMsg">桩基本信息</button>  获取</li>
 	          <br>
 	          <div class="detailsMsg">
 				<table>
@@ -84,7 +84,7 @@
 						<td>力传感器校正系数:{{stakeInfo.sensorAdjust}}</td>
 					</tr>
 					<tr>
-						<td>最大位移:{{stakeInfo.maxValue}} mm</td>
+						<td>最大位移:{{stakeInfo.maxSensorValue}} mm</td>
 						<td>记录数:{{stakeInfo.recordTimes}}</td>
 						<td>上传时间:{{stakeInfo.createTime}}</td>
 						<td>设备厂家:{{stakeInfo.vendorId}}</td>
